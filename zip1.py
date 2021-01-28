@@ -1,14 +1,12 @@
-r = open('C:\\Users\\SAM\\Desktop\\A.zip', 'rb')
+r = open('C:\\Users\\leeyubin\\Desktop\\A.zip', 'rb')
 #Local file signature offset 찾기
-list = r.read()
-b = 0
 a = []
-for b in list :
-    r.seek(b)
-    f = r.read(b+4)
-    if f == 'x50\x4B\x01\x02':
+while True:
+    r.seek(a)
+    f = list(r.read(4)) 
+    if f == '\x50\x4B\x01\x02':
         break
-    else :
+    elif f == '\x50\x4B\x03\x04':
         a.append(f)
         break
 #print(a)
@@ -56,13 +54,12 @@ print("file 이름 :",b''.join(name_offset))
 
 #Data offset 찾기
 data_offset = []
-data_offset.extend(name_offset)
-data_offset.extend(name_length)
-data_offset.extend(extra_length)
+data_offset = name_offset + name_length + extra_length
+r.seek(data_offset)
+data = r.read(5)    
 file = open('t.txt', 'wb+')
-file.write(b''.join(data_offset))
+file.write(b''.join(data))
 file.close()
 
-print("data 시작:", r.read(len(e)))
-
+print("data 시작:", data_offset)
 
